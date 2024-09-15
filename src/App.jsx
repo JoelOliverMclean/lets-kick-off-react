@@ -8,6 +8,8 @@ import Cookies from "js-cookie";
 import { getLoggedInUser } from "./api/auth";
 import { getCsrfToken } from "./helpers/NetworkHelper";
 import Group from "./pages/Group";
+import Account from "./pages/Account";
+import Login from "./pages/Login";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -38,6 +40,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/group/:uuid" element={<Group />} />
               <Route path="*" element={<NoPage />} />
             </Route>

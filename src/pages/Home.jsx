@@ -80,6 +80,14 @@ const Home = () => {
             <h1 className="font-semibold text-green-500">KickOff</h1>
           </div>
           <Registration registerNewUser={registerNewUser} />
+          <div className="flex flex-col items-center p-3">
+            <Link
+              to={"/login"}
+              className="underline-offset-3 p-2 text-base hover:underline"
+            >
+              Already registered? <span>Login</span>
+            </Link>
+          </div>
         </div>
       )}
     </div>

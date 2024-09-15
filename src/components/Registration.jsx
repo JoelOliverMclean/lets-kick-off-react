@@ -57,7 +57,7 @@ export default function Registration(props) {
   }
 
   return (
-    <form className="w-2/3 sm:w-auto" onSubmit={validateForm}>
+    <form className="" onSubmit={validateForm}>
       <div className="flex flex-col gap-5 text-xl">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col">
