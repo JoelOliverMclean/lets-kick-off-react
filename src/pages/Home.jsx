@@ -23,11 +23,13 @@ const Home = () => {
   }
 
   useEffect(() => {
-    setLoadingGroups(true);
-    getMyGroups().then((groups) => {
-      setGroups(groups);
-      setLoadingGroups(false);
-    });
+    if (loggedInUser) {
+      setLoadingGroups(true);
+      getMyGroups().then((groups) => {
+        setGroups(groups);
+        setLoadingGroups(false);
+      });
+    }
   }, [loggedInUser]);
 
   return (
