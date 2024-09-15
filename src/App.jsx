@@ -7,12 +7,13 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { getLoggedInUser } from "./api/auth";
 import { getCsrfToken } from "./helpers/NetworkHelper";
+import Group from "./pages/Group";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
 
   useEffect(() => {
-    // getCsrfToken();
+    getCsrfToken();
     if (Cookies.get("loggedIn")) {
       getLoggedInUser().then((user) => {
         setLoggedInUser(user);
@@ -37,6 +38,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="/group/:uuid" element={<Group />} />
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>

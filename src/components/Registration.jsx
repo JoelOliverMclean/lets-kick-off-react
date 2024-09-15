@@ -11,6 +11,7 @@ export default function Registration(props) {
     password: "",
     groupName: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   function validateForm(e) {
     e.preventDefault();
@@ -60,20 +61,20 @@ export default function Registration(props) {
       <div className="flex flex-col gap-5 text-xl">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col">
-            <label className="p-1 opacity-80">Name</label>
+            <label className="p-1 opacity-80 duration-300">Name</label>
             <input
               name="name"
-              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg focus:border-green-500 focus:outline-none focus:ring-0"
+              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
             />
             {errors.name.length > 0 && (
               <p className="px-2 pt-1 text-xs text-red-700">{errors.name}</p>
             )}
           </div>
           <div className="flex flex-col">
-            <label className="p-1 opacity-80">Username</label>
+            <label className="p-1 opacity-80 duration-300">Username</label>
             <input
               name="username"
-              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg focus:border-green-500 focus:outline-none focus:ring-0"
+              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
             />
             {errors.username.length > 0 && (
               <p className="px-2 pt-1 text-xs text-red-700">
@@ -82,10 +83,23 @@ export default function Registration(props) {
             )}
           </div>
           <div className="flex flex-col">
-            <label className="p-1 opacity-80">Password</label>
+            <label className="p-1 opacity-80 duration-300">
+              Password
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="ms-3 cursor-pointer text-base"
+              >
+                {showPassword ? (
+                  <i className="fa-solid fa-eye"></i>
+                ) : (
+                  <i className="fa-solid fa-eye-slash"></i>
+                )}
+              </span>
+            </label>
             <input
+              type={showPassword ? "text" : "password"}
               name="password"
-              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg focus:border-green-500 focus:outline-none focus:ring-0"
+              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
             />
             {errors.password.length > 0 && (
               <p className="px-2 pt-1 text-xs text-red-700">
@@ -94,7 +108,7 @@ export default function Registration(props) {
             )}
           </div>
           <div className="flex flex-col">
-            <label className="p-1 opacity-80">
+            <label className="p-1 opacity-80 duration-300">
               Group Name{" "}
               <span className="my-anchor-element text-base opacity-50">
                 (optional)
@@ -105,7 +119,7 @@ export default function Registration(props) {
             </label>
             <input
               name="groupName"
-              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg focus:border-green-500 focus:outline-none focus:ring-0"
+              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
             />
             {errors.groupName.length > 0 && (
               <p className="px-2 pt-1 text-xs text-red-700">
