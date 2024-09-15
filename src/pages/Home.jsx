@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../helpers/AuthContext";
 import { helloWorld, register } from "../api/auth";
 import { getMyGroups } from "../api/groups";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import pitchBg from "../assets/pitch-bg.jpg";
 
@@ -11,6 +11,7 @@ const Home = () => {
   const { loggedInUser } = useContext(AuthContext);
   const [groups, setGroups] = useState([]);
   const [loadingGroups, setLoadingGroups] = useState(false);
+  const navigate = useNavigate();
 
   async function registerNewUser(userInfo) {
     var newUser = await register(
@@ -19,7 +20,7 @@ const Home = () => {
       userInfo.password,
       userInfo.groupName,
     );
-    console.log(newUser);
+    navigate(0);
   }
 
   useEffect(() => {
