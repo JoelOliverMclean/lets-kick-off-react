@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+html {
+  outline: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #121212;
+  color: whitesmoke;
+}
+
+input {
+  background-color: #0a0a0a;
+  color: whitesmoke;
+}
+
+input:focus {
+  background-color: #050505;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+#getStarted {
+  animation: 0.5s ease-out 0s 1 slideInFromLeft;
+}
+
+label:has(+ input:focus) {
+  color: theme("colors.green.500");
+}
