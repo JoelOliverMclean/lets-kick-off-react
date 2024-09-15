@@ -5,6 +5,7 @@ import { helloWorld, register } from "../api/auth";
 import { getMyGroups } from "../api/groups";
 import { Link } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import pitchBg from "../assets/pitch-bg.jpg";
 
 const Home = () => {
   const { loggedInUser } = useContext(AuthContext);
@@ -31,7 +32,17 @@ const Home = () => {
 
   return (
     <div
-      className={`flex flex-1 flex-col items-center justify-center gap-5 ${!loggedInUser ? "pitch-bg" : ""}`}
+      style={
+        !loggedInUser
+          ? {
+              backgroundImage: `url(${pitchBg})`,
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+            }
+          : {}
+      }
+      className={`flex flex-1 flex-col items-center justify-center gap-5`}
     >
       {loggedInUser ? (
         <>

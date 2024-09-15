@@ -41,13 +41,6 @@ input:focus {
   backdrop-filter: blur(4px);
 }
 
-.pitch-bg {
-  background-image: url("/pitch-bg.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 label:has(+ input:focus) {
   color: theme("colors.green.500");
 }
