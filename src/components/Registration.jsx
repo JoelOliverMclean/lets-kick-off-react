@@ -67,7 +67,7 @@ export default function Registration(props) {
               className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
             />
             {errors.name.length > 0 && (
-              <p className="px-2 pt-1 text-xs text-red-700">{errors.name}</p>
+              <p className="px-2 pt-1 text-xs text-orange-400">{errors.name}</p>
             )}
           </div>
           <div className="flex flex-col">
@@ -77,7 +77,7 @@ export default function Registration(props) {
               className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
             />
             {errors.username.length > 0 && (
-              <p className="px-2 pt-1 text-xs text-red-700">
+              <p className="px-2 pt-1 text-xs text-orange-400">
                 {errors.username}
               </p>
             )}
@@ -102,7 +102,7 @@ export default function Registration(props) {
               className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
             />
             {errors.password.length > 0 && (
-              <p className="px-2 pt-1 text-xs text-red-700">
+              <p className="px-2 pt-1 text-xs text-orange-400">
                 {errors.password}
               </p>
             )}
@@ -122,13 +122,13 @@ export default function Registration(props) {
               className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
             />
             {errors.groupName.length > 0 && (
-              <p className="px-2 pt-1 text-xs text-red-700">
+              <p className="px-2 pt-1 text-xs text-orange-400">
                 {errors.groupName}
               </p>
             )}
           </div>
         </div>
-        <div className="px-1 pt-5 duration-200 hover:px-0">
+        <div className="px-1 duration-200 hover:px-0">
           <button
             className="w-full rounded-md bg-green-600 px-2 py-1 font-semibold shadow-lg shadow-black"
             type="submit"

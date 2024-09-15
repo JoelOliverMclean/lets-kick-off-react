@@ -9,7 +9,8 @@ const Layout = () => {
   return (
     <>
       <div className="flex min-h-screen w-full flex-col">
-        {(loggedInUser || location.pathname !== "/") && (
+        {(loggedInUser ||
+          (location.pathname !== "/" && location.pathname !== "/login")) && (
           <div className="flex items-start justify-between bg-gradient-to-b from-slate-800 to-transparent p-4">
             <Link to="/" className="flex flex-col">
               <h1 className="text-3xl">Lets</h1>

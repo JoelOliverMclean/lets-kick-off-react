@@ -42,54 +42,52 @@ const Home = () => {
             }
           : {}
       }
-      className={`flex flex-1 flex-col items-center justify-center gap-5`}
+      className={`flex flex-1 flex-col items-center justify-start gap-5 p-10 sm:justify-center sm:p-4`}
     >
       {loggedInUser ? (
-        <>
-          <div className="flex w-full flex-1 flex-col gap-4 p-4 duration-200">
-            <h2 className="text-3xl">
-              My<span className="font-semibold text-green-500">Groups</span>
-            </h2>
-            <div className="flex justify-center duration-200">
-              {loadingGroups ? (
-                <ClipLoader
-                  color="#f0f0f0"
-                  loading={loadingGroups}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                />
-              ) : (
-                <div className="grid flex-1 grid-cols-1 sm:grid-cols-2">
-                  {groups.map((group, index) => (
-                    <Link
-                      to={{
-                        pathname: `/group/${group.uuid}`,
-                      }}
-                      key={index}
-                      className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 p-3 text-center text-xl duration-200 hover:bg-slate-800"
-                    >
-                      {group.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-            <h2 className="text-3xl">
-              My<span className="font-semibold text-green-500">Player</span>
-            </h2>
-            <div className="flex flex-col gap-2 rounded-lg border-2 border-solid border-green-500 bg-slate-900 p-3 text-xl duration-200 sm:self-start">
-              <h3 className="text-center text-2xl font-semibold">
-                {loggedInUser.name ?? loggedInUser.username}
-              </h3>
-              <hr />
-              <p className="text-center opacity-50">Coming soon...</p>
-            </div>
+        <div className="flex w-full flex-1 flex-col gap-4 p-4 duration-200">
+          <h2 className="text-3xl">
+            My<span className="font-semibold text-green-500">Groups</span>
+          </h2>
+          <div className="flex justify-center duration-200">
+            {loadingGroups ? (
+              <ClipLoader
+                color="#f0f0f0"
+                loading={loadingGroups}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              <div className="grid flex-1 grid-cols-1 sm:grid-cols-2">
+                {groups.map((group, index) => (
+                  <Link
+                    to={{
+                      pathname: `/group/${group.uuid}`,
+                    }}
+                    key={index}
+                    className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 p-3 text-center text-xl duration-200 hover:bg-slate-800"
+                  >
+                    {group.name}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
-        </>
+          <h2 className="text-3xl">
+            My<span className="font-semibold text-green-500">Player</span>
+          </h2>
+          <div className="flex flex-col gap-2 rounded-lg border-2 border-solid border-green-500 bg-slate-900 p-3 text-xl duration-200 sm:self-start">
+            <h3 className="text-center text-2xl font-semibold">
+              {loggedInUser.name ?? loggedInUser.username}
+            </h3>
+            <hr />
+            <p className="text-center opacity-50">Coming soon...</p>
+          </div>
+        </div>
       ) : (
         <div
           id="getStarted"
-          className="rounded-xl bg-[#121212] bg-opacity-70 p-4 shadow-lg shadow-black"
+          className="w-full rounded-xl bg-[#121212] bg-opacity-70 p-4 shadow-lg shadow-black backdrop-blur-sm sm:w-auto"
         >
           <div className="pb-3 text-7xl">
             <h1 className="">Lets</h1>
@@ -101,7 +99,10 @@ const Home = () => {
               to={"/login"}
               className="underline-offset-3 p-2 text-base hover:underline"
             >
-              Already registered? <span>Login</span>
+              Already registered?{" "}
+              <span className="font-semibold text-green-500 hover:underline">
+                Login
+              </span>
             </Link>
           </div>
         </div>
