@@ -130,7 +130,7 @@ export default function Registration(props) {
         </div>
         <div className="px-1 pt-5 duration-200 hover:px-0">
           <button
-            className="w-full rounded-md bg-green-500 px-2 py-1 font-semibold shadow-lg shadow-black"
+            className="w-full rounded-md bg-green-600 px-2 py-1 font-semibold shadow-lg shadow-black"
             type="submit"
           >
             Get Started

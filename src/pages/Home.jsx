@@ -30,7 +30,9 @@ const Home = () => {
   }, [loggedInUser]);
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-5">
+    <div
+      className={`flex flex-1 flex-col items-center justify-center gap-5 ${!loggedInUser ? "pitch-bg" : ""}`}
+    >
       {loggedInUser ? (
         <>
           <div className="flex w-full flex-1 flex-col gap-4 p-4 duration-200">
@@ -74,13 +76,16 @@ const Home = () => {
           </div>
         </>
       ) : (
-        <div id="getStarted">
-          <div className="text-7xl">
+        <div
+          id="getStarted"
+          className="rounded-xl bg-[#121212] bg-opacity-70 p-4 shadow-lg shadow-black"
+        >
+          <div className="pb-3 text-7xl">
             <h1 className="">Lets</h1>
             <h1 className="font-semibold text-green-500">KickOff</h1>
           </div>
           <Registration registerNewUser={registerNewUser} />
-          <div className="flex flex-col items-center p-3">
+          <div className="flex flex-col items-center pt-3">
             <Link
               to={"/login"}
               className="underline-offset-3 p-2 text-base hover:underline"

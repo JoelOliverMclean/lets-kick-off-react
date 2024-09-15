@@ -30,7 +30,12 @@ export default function Group() {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <h2 className="text-3xl font-semibold">{group?.name}</h2>
+          <div>
+            <h2 className="text-xl">Group</h2>
+            <h2 className="text-3xl font-semibold text-green-500">
+              {group?.name}
+            </h2>
+          </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
             <Link className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 py-3 text-center text-xl hover:bg-slate-800">
               Team Picker

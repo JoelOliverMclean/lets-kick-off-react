@@ -18,8 +18,8 @@ export default function Account() {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <h1 className="text-4xl">
+    <div className="flex flex-col gap-4 p-4 sm:items-start">
+      <h1 className="text-3xl">
         My<span className="font-semibold text-green-500">Account</span>
       </h1>
       <button
