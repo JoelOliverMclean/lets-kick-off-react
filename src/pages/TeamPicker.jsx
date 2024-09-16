@@ -190,126 +190,136 @@ export default function TeamPicker() {
             </h2>
           </div>
           <div className="relative">
-            <div
-              className={
-                "slideInOut absolute bottom-0 left-0 right-0 top-0 flex flex-col gap-2 " +
-                `${step === "players" ? "visible" : "hide"}`
-              }
-            >
-              <h3 className="text-xl font-semibold">Who's available?</h3>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {group?.players?.map((player, index) => (
-                  <div
-                    onClick={() => togglePlayerAvailable(player.uuid)}
-                    className={
-                      "rounded-lg border-2 border-solid bg-gradient-to-r from-slate-800 to-[#121212] px-3 py-2 " +
-                      `${selectedPlayers.includes(player.uuid) ? "border-green-500" : "border-[#121212]"}`
-                    }
-                    key={index}
+            {step === "players" && (
+              <div
+                className={
+                  "fadeInOut absolute bottom-0 left-0 right-0 top-0 flex flex-col gap-2" +
+                  `${step === "players" ? "visible" : "hide"}`
+                }
+              >
+                <h3 className="text-xl font-semibold">Who's available?</h3>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {group?.players?.map((player, index) => (
+                    <div
+                      onClick={() => togglePlayerAvailable(player.uuid)}
+                      className={
+                        "rounded-lg border-2 border-solid bg-gradient-to-r from-slate-800 to-[#121212] px-3 py-2 " +
+                        `${selectedPlayers.includes(player.uuid) ? "border-green-500" : "border-[#121212]"}`
+                      }
+                      key={index}
+                    >
+                      {player.name}
+                    </div>
+                  ))}
+                </div>
+                <div className="sticky bottom-0 flex flex-col items-center justify-center gap-4 p-2">
+                  <button
+                    onClick={toMethodPick}
+                    className="rounded-md bg-green-600 px-4 py-2 text-xl font-semibold shadow-md shadow-black"
                   >
-                    {player.name}
+                    Pick Teams
+                  </button>
+                </div>
+              </div>
+            )}
+            {step === "method" && (
+              <div
+                className={
+                  "fadeInOut absolute bottom-0 left-0 right-0 top-0 flex flex-col gap-3 " +
+                  `${step === "method" ? "visible" : "hide"}`
+                }
+              >
+                <h3 className="text-xl font-semibold">
+                  How do you prefer to pick?
+                </h3>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <button
+                    onClick={() => pickMethod("total")}
+                    className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
+                  >
+                    Total Rating
+                  </button>
+                  <button
+                    onClick={() => pickMethod("average")}
+                    className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
+                  >
+                    Average Rating
+                  </button>
+                  <button
+                    onClick={() => pickMethod("combination")}
+                    className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
+                  >
+                    Combination
+                  </button>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <label className="text-sm">Remember my choice?</label>
+                  <label className="switch switch-sm">
+                    <input type="checkbox" id="rememberMethodChoice" />
+                    <span className="slider-sm rounded-md before:rounded-md"></span>
+                  </label>
+                </div>
+              </div>
+            )}
+            {(step === "generating" || step === "teams") && (
+              <>
+                <div
+                  className={
+                    "fadeInOut startHidden absolute bottom-0 left-0 right-0 top-0 -z-10 flex flex-col " +
+                    `${step === "generating" ? "visible" : "hide"}`
+                  }
+                >
+                  <div className="flex flex-col items-center gap-5 py-10">
+                    <p className="text-2xl text-green-500">
+                      Generating Teams...
+                    </p>
+                    <div>
+                      <ClipLoader
+                        color="#22c55e"
+                        size={64}
+                        loading={true}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                      />
+                    </div>
                   </div>
-                ))}
-              </div>
-              <div className="sticky bottom-0 flex flex-col items-center justify-center gap-4 p-2">
-                <button
-                  onClick={toMethodPick}
-                  className="rounded-md bg-green-600 px-4 py-2 text-xl font-semibold shadow-md shadow-black"
-                >
-                  Pick Teams
-                </button>
-              </div>
-            </div>
-            <div
-              className={
-                "slideInOut startHidden absolute bottom-0 left-0 right-0 top-0 flex flex-col gap-3 " +
-                `${step === "method" ? "visible" : "hide"}`
-              }
-            >
-              <h3 className="text-xl font-semibold">
-                How do you prefer to pick?
-              </h3>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <button
-                  onClick={() => pickMethod("total")}
-                  className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
-                >
-                  Total Rating
-                </button>
-                <button
-                  onClick={() => pickMethod("average")}
-                  className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
-                >
-                  Average Rating
-                </button>
-                <button
-                  onClick={() => pickMethod("combination")}
-                  className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
-                >
-                  Combination
-                </button>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <label className="text-sm">Remember my choice?</label>
-                <label className="switch switch-sm">
-                  <input type="checkbox" id="rememberMethodChoice" />
-                  <span className="slider-sm rounded-md before:rounded-md"></span>
-                </label>
-              </div>
-            </div>
-            <div
-              className={
-                "fadeInOut startHidden absolute bottom-0 left-0 right-0 top-0 -z-10 flex flex-col " +
-                `${step === "generating" ? "visible" : "hide"}`
-              }
-            >
-              <div className="flex flex-col items-center gap-5 py-10">
-                <p className="text-2xl text-green-500">Generating Teams...</p>
-                <div>
-                  <ClipLoader
-                    color="#22c55e"
-                    size={64}
-                    loading={true}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                  />
                 </div>
-              </div>
-            </div>
-            <div
-              className={
-                "fadeInOut startHidden absolute bottom-0 left-0 right-0 top-0 flex flex-col gap-3 " +
-                `${step === "teams" ? "visible" : "hide"}`
-              }
-            >
-              <div className="flex w-auto flex-col gap-3 sm:w-[360px] sm:items-start">
-                <div className="w-full" ref={teamsGraphicRef}>
-                  {teams && (
-                    <TeamsPitchGraphic
-                      team1={teams?.team1}
-                      team2={teams?.team2}
-                      onPlayerClick={() => {}}
-                      small={false}
-                    />
-                  )}
+                <div
+                  className={
+                    "fadeInOut startHidden absolute bottom-0 left-0 right-0 top-0 flex flex-col gap-3 " +
+                    `${step === "teams" ? "visible" : "hide"}`
+                  }
+                >
+                  <div className="flex w-auto flex-col gap-3 sm:w-[360px] sm:items-start">
+                    <div className="w-full" ref={teamsGraphicRef}>
+                      {teams && (
+                        <TeamsPitchGraphic
+                          team1={teams?.team1}
+                          team2={teams?.team2}
+                          onPlayerClick={() => {}}
+                          small={false}
+                        />
+                      )}
+                    </div>
+                    <div className="grid w-full grid-cols-2 gap-3">
+                      <button
+                        onClick={() => shareTeamGraphic()}
+                        className="rounded-md bg-green-600 px-3 py-2 shadow-md shadow-black"
+                      >
+                        Share Graphic
+                      </button>
+                      <button
+                        onClick={() => copyTeamsText()}
+                        className="rounded-md bg-green-600 px-3 py-2 shadow-md shadow-black"
+                      >
+                        {" "}
+                        Share Text
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="grid w-full grid-cols-2 gap-3">
-                  <button
-                    onClick={() => shareTeamGraphic()}
-                    className="rounded-md bg-green-600 px-3 py-2 shadow-md shadow-black"
-                  >
-                    Share Graphic
-                  </button>
-                  <button
-                    onClick={() => copyTeamsText()}
-                    className="rounded-md bg-green-600 px-3 py-2 shadow-md shadow-black"
-                  >
-                    {" "}
-                    Share Text
-                  </button>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </div>
       )}
