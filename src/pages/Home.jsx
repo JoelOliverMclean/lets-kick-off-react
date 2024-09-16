@@ -45,7 +45,7 @@ const Home = () => {
             }
           : {}
       }
-      className={`flex flex-1 flex-col items-center justify-start gap-5 p-4 sm:justify-center sm:p-4`}
+      className={`flex min-h-screen flex-1 flex-col items-center justify-start gap-5 p-4 sm:justify-center sm:p-4`}
     >
       {loggedInUser ? (
         <div className="flex w-full flex-1 flex-col gap-4 duration-200">
