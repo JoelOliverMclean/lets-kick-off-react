@@ -53,7 +53,6 @@ const apiPostFormData = (action, body) => {
 const getCsrfToken = async () => {
   apiGet("csrf").then((response) => {
     if (response.status === 200) {
-      console.log(response.data.csrfToken);
       api.defaults.headers = {
         "x-csrf-token": response.data.csrfToken,
       };

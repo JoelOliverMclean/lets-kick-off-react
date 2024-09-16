@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../helpers/AuthContext";
 import { logout } from "../api/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Account() {
   const { loggedInUser, setLoggedInUser } = useContext(AuthContext);
@@ -18,7 +18,10 @@ export default function Account() {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4 sm:items-start">
+    <div className="flex flex-col gap-4 px-4 sm:items-start">
+      <Link to={`/`} className="text-sm font-semibold text-gray-500">
+        <i className="fa-solid fa-chevron-left"></i> Home
+      </Link>
       <h1 className="text-3xl">
         My<span className="font-semibold text-green-500">Account</span>
       </h1>

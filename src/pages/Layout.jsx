@@ -11,9 +11,9 @@ const Layout = () => {
       <div className="flex min-h-screen w-full flex-col">
         {(loggedInUser ||
           (location.pathname !== "/" && location.pathname !== "/login")) && (
-          <div className="flex items-start justify-between bg-gradient-to-b from-slate-800 to-transparent p-4">
+          <div className="sticky top-0 flex items-start justify-between bg-gradient-to-b from-slate-800 to-[#121212] p-4">
             <Link to="/" className="flex flex-col">
-              <h1 className="text-3xl">Lets</h1>
+              <h1 className="text-3xl text-white">Lets</h1>
               <h1 className="text-4xl font-bold text-green-500">KickOff</h1>
             </Link>
             {loggedInUser && location.pathname !== "/account" && (

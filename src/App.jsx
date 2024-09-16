@@ -10,6 +10,11 @@ import { getCsrfToken } from "./helpers/NetworkHelper";
 import Group from "./pages/Group";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
+import AddPlayers from "./pages/AddPlayers";
+import Players from "./pages/Players";
+import PlayerDetail from "./pages/PlayerDetail";
+import EditPlayer from "./pages/EditPlayer";
+import TeamPicker from "./pages/TeamPicker";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -19,11 +24,6 @@ function App() {
     if (Cookies.get("loggedIn")) {
       getLoggedInUser().then((user) => {
         setLoggedInUser(user);
-        if (user) {
-          console.log("Logged in");
-        } else {
-          console.log("Logged out");
-        }
       });
     }
   }, []);
@@ -43,6 +43,17 @@ function App() {
               <Route path="/account" element={<Account />} />
               <Route path="/login" element={<Login />} />
               <Route path="/group/:uuid" element={<Group />} />
+              <Route path="/group/:uuid/team-picker" element={<TeamPicker />} />
+              <Route path="/group/:uuid/players" element={<Players />} />
+              <Route path="/group/:uuid/players/add" element={<AddPlayers />} />
+              <Route
+                path="/group/:uuid/players/detail/:name"
+                element={<PlayerDetail />}
+              />
+              <Route
+                path="/group/:uuid/players/detail/:name/edit"
+                element={<EditPlayer />}
+              />
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>

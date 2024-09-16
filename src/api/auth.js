@@ -8,7 +8,7 @@ export async function login(username, password) {
   if (response.status === 200) {
     return response.data;
   } else {
-    console.log(response.error);
+    console.log(response.data.error);
     return null;
   }
 }
@@ -18,7 +18,7 @@ export async function logout() {
   if (response.status === 200) {
     return true;
   } else {
-    console.log(response.error);
+    console.log(response.data.error);
     return false;
   }
 }
@@ -33,14 +33,9 @@ export async function register(name, username, password, groupName) {
   if (response.status === 200) {
     return response.data;
   } else {
-    console.log(response);
+    console.log(response.data.error);
     return null;
   }
-}
-
-export async function helloWorld() {
-  var response = await apiGet("/0.1");
-  console.log(response);
 }
 
 export async function getLoggedInUser() {

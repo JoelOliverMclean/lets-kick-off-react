@@ -1,7 +1,7 @@
 import Registration from "../components/Registration";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../helpers/AuthContext";
-import { helloWorld, register } from "../api/auth";
+import { register } from "../api/auth";
 import { getMyGroups } from "../api/groups";
 import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";

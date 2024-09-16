@@ -5,7 +5,7 @@ export async function getMyGroups() {
   if (response.status === 200) {
     return response.data;
   } else {
-    console.log(response.error);
+    console.log(response.data.error);
     return [];
   }
 }
@@ -15,7 +15,7 @@ export async function getGroup(uuid) {
   if (response.status === 200) {
     return response.data;
   } else {
-    console.log(response.error);
+    console.log(response.data.error);
     return null;
   }
 }
