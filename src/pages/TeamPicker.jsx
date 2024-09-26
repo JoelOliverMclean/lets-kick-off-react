@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getGroup } from "../api/groups";
-import { CircleLoader, ClipLoader } from "react-spinners";
-import $ from "jquery";
+import { ClipLoader } from "react-spinners";
 import { generateTeamsApi } from "../api/teamPicker";
 import TeamsPitchGraphic from "../components/TeamsPitchGraphic";
 import { toPng } from "html-to-image";
@@ -12,7 +11,7 @@ import moment from "moment";
 export default function TeamPicker() {
   const { uuid } = useParams();
 
-  const methodChoice = localStorage.getItem("methodChoice") ?? null;
+  // const methodChoice = localStorage.getItem("methodChoice") ?? null;
 
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -20,7 +19,7 @@ export default function TeamPicker() {
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [teams, setTeams] = useState(null);
   const [generating, setGenerating] = useState(false);
-  const [method, setMethod] = useState(methodChoice);
+  // const [method, setMethod] = useState(methodChoice);
 
   const teamsGraphicRef = useRef(null);
 
@@ -111,16 +110,16 @@ export default function TeamPicker() {
     }
   }
 
-  function pickMethod(method) {
-    const remember = $("#rememberMethodChoice").val() === "on";
-    if (!remember) {
-      localStorage.removeItem("methodChoice");
-    } else {
-      localStorage.setItem("methodChoice", method);
-    }
-    setMethod(method);
-    generateTeams();
-  }
+  // function pickMethod(method) {
+  //   const remember = $("#rememberMethodChoice").val() === "on";
+  //   if (!remember) {
+  //     localStorage.removeItem("methodChoice");
+  //   } else {
+  //     localStorage.setItem("methodChoice", method);
+  //   }
+  //   setMethod(method);
+  //   generateTeams();
+  // }
 
   function togglePlayerAvailable(playerUuid) {
     if (selectedPlayers.includes(playerUuid)) {
@@ -130,32 +129,24 @@ export default function TeamPicker() {
     }
   }
 
-  function toMethodPick() {
-    if (methodChoice == null) {
-      setStep("method");
-    } else {
-      generateTeams();
-    }
-  }
+  // function toMethodPick() {
+  //   if (methodChoice == null) {
+  //     setStep("method");
+  //   } else {
+  //     generateTeams();
+  //   }
+  // }
 
   const generateTeams = useCallback(() => {
     setStep("generating");
     setGenerating(true);
     setTimeout(() => {
-      generateTeamsApi(selectedPlayers, method, uuid).then((teams) => {
+      generateTeamsApi(selectedPlayers, "", uuid).then((teams) => {
         setTeams(teams);
         setStep("teams");
       });
     }, 1000);
-  }, [
-    generating,
-    selectedPlayers,
-    method,
-    setStep,
-    setTeams,
-    teams,
-    setGenerating,
-  ]);
+  }, [generating, selectedPlayers, setStep, setTeams, teams, setGenerating]);
 
   useEffect(() => {
     setLoading(true);
@@ -214,7 +205,7 @@ export default function TeamPicker() {
                 </div>
                 <div className="sticky bottom-0 flex flex-col items-center justify-center gap-4 p-2">
                   <button
-                    onClick={toMethodPick}
+                    onClick={generateTeams}
                     className="rounded-md bg-green-600 px-4 py-2 text-xl font-semibold shadow-md shadow-black"
                   >
                     Pick Teams
@@ -222,7 +213,7 @@ export default function TeamPicker() {
                 </div>
               </div>
             )}
-            {step === "method" && (
+            {/* {step === "method" && (
               <div
                 className={
                   "fadeInOut absolute bottom-0 left-0 right-0 top-0 flex flex-col gap-3 " +
@@ -260,7 +251,7 @@ export default function TeamPicker() {
                   </label>
                 </div>
               </div>
-            )}
+            )} */}
             {(step === "generating" || step === "teams") && (
               <>
                 <div
