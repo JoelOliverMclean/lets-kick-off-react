@@ -3,6 +3,7 @@ import $ from "jquery";
 import { Tooltip } from "react-tooltip";
 import { AuthContext } from "../helpers/AuthContext";
 import { login } from "../api/auth";
+import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import pitchBg from "../assets/pitch-bg.jpg";
 
@@ -57,7 +58,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (loggedInUser) {
+    if (Cookies.get("loggedIn")) {
       navigate("/");
     }
   }, []);
