@@ -148,6 +148,10 @@ export default function TeamPicker() {
     }, 1000);
   }, [generating, selectedPlayers, setStep, setTeams, teams, setGenerating]);
 
+  const backToPlayerPick = useCallback(() => {
+    setStep("players");
+  }, [setStep]);
+
   useEffect(() => {
     setLoading(true);
     getGroup(uuid).then((group) => {
@@ -305,6 +309,22 @@ export default function TeamPicker() {
                       >
                         {" "}
                         Share Text
+                      </button>
+                    </div>
+                    <p className="text-center">Not quite right?</p>
+                    <div className="grid w-full grid-cols-2 gap-3">
+                      <button
+                        onClick={() => backToPlayerPick()}
+                        className="rounded-md border-2 border-green-600 bg-transparent px-3 py-2 shadow-md shadow-black"
+                      >
+                        Change players
+                      </button>
+                      <button
+                        onClick={() => generateTeams()}
+                        className="rounded-md border-2 border-green-600 bg-transparent px-3 py-2 shadow-md shadow-black"
+                      >
+                        {" "}
+                        Regenerate
                       </button>
                     </div>
                   </div>
