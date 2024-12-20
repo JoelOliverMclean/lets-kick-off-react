@@ -64,7 +64,7 @@ export default function RatingsReviewVote() {
           <div
             onClick={() => voterChosen(player)}
             key={player.uuid}
-            className={`rounded-md border border-green-500 px-2 py-1 text-center duration-500 ${player === voter ? "bg-green-700" : "bg-gradient-to-b from-gray-800 to-black hover:from-black hover:to-gray-800"}`}
+            className={`rounded-md border border-green-500 p-2 text-center text-xl duration-500 ${player === voter ? "bg-green-700" : "bg-gradient-to-b from-gray-800 to-black hover:from-black hover:to-gray-800"}`}
           >
             <div>
               {player.name}
@@ -154,11 +154,11 @@ export default function RatingsReviewVote() {
         <div className="flex flex-col gap-2">
           {review?.players?.map((player) => (
             <div key={player.uuid} className={`flex flex-col rounded-md`}>
-              <div className="text-lg font-semibold">
-                <div className="px-2">{player.name}</div>
+              <div className="text-xl font-semibold">
+                <div className="px-2 pb-1">{player.name}</div>
                 {/* <div className="border border-green-500"></div> */}
               </div>
-              <div className="flex justify-between rounded-lg bg-green-800 p-2 text-center text-sm shadow shadow-black">
+              <div className="flex justify-between rounded-lg bg-green-800 px-2 py-3 text-center text-sm shadow shadow-black">
                 <div className="flex flex-col gap-1 px-1">
                   <div>Rating</div>
                   <select
@@ -213,7 +213,7 @@ export default function RatingsReviewVote() {
         </div>
         <div className="px-1 pt-5 duration-200 hover:px-0">
           <button
-            className="w-full rounded-md bg-green-600 px-2 py-1 font-semibold shadow-lg shadow-black"
+            className="w-full rounded-md bg-green-600 px-4 py-2 text-xl font-semibold shadow-lg shadow-black"
             type="submit"
             name="finished"
           >
