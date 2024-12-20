@@ -53,6 +53,12 @@ export default function Group() {
               >
                 Players
               </Link>
+              <Link
+                to={"ratings-review"}
+                className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 py-3 text-center text-xl hover:bg-slate-800"
+              >
+                Ratings Review
+              </Link>
               {/* <Link className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 py-3 text-center text-xl hover:bg-slate-800">
                 Matches
               </Link> */}

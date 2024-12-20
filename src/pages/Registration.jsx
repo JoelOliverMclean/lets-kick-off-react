@@ -6,19 +6,19 @@ import { login } from "../api/auth";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import pitchBg from "../assets/pitch-bg.jpg";
-import LoginForm from "../components/LoginForm";
+import RegistrationForm from "../components/RegistrationForm";
 
-export default function Login() {
+export default function Registration() {
   const navigate = useNavigate();
 
-  const { setLoggedInUser } = useContext(AuthContext);
-
-  async function loginUser(data) {
-    var user = await login(data.username, data.password);
-    setLoggedInUser(user);
-    if (user) {
-      navigate("/");
-    }
+  async function registerNewUser(userInfo) {
+    await register(
+      userInfo.name,
+      userInfo.username,
+      userInfo.password,
+      userInfo.groupName,
+    );
+    navigate(0);
   }
 
   useEffect(() => {
@@ -45,15 +45,15 @@ export default function Login() {
           <h1 className="">Lets</h1>
           <h1 className="font-semibold text-green-500">KickOff</h1>
         </div>
-        <LoginForm loginUser={loginUser} />
+        <RegistrationForm registerNewUser={registerNewUser} />
         <div className="flex flex-col items-center pt-3">
           <Link
-            to={"/register"}
+            to={"/login"}
             className="underline-offset-3 p-2 text-base hover:underline"
           >
-            No account?{" "}
+            Already registered?{" "}
             <span className="font-semibold text-green-500 hover:underline">
-              Sign up here
+              Login
             </span>
           </Link>
         </div>

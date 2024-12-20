@@ -1,4 +1,4 @@
-import Registration from "../components/Registration";
+import Registration from "../components/RegistrationForm";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../helpers/AuthContext";
 import { register } from "../api/auth";
@@ -6,6 +6,8 @@ import { getMyGroups } from "../api/groups";
 import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import pitchBg from "../assets/pitch-bg.jpg";
+import Login from "../components/LoginForm";
+import LoginForm from "../components/LoginForm";
 
 const Home = () => {
   const { loggedInUser } = useContext(AuthContext);
@@ -13,14 +15,12 @@ const Home = () => {
   const [loadingGroups, setLoadingGroups] = useState(false);
   const navigate = useNavigate();
 
-  async function registerNewUser(userInfo) {
-    var newUser = await register(
-      userInfo.name,
-      userInfo.username,
-      userInfo.password,
-      userInfo.groupName,
-    );
-    navigate(0);
+  async function loginUser(data) {
+    var user = await login(data.username, data.password);
+    setLoggedInUser(user);
+    if (user) {
+      navigate("/");
+    }
   }
 
   useEffect(() => {
@@ -97,15 +97,15 @@ const Home = () => {
               <h1 className="">Lets</h1>
               <h1 className="font-semibold text-green-500">KickOff</h1>
             </div>
-            <Registration registerNewUser={registerNewUser} />
+            <LoginForm loginUser={loginUser} />
             <div className="flex flex-col items-center pt-3">
               <Link
-                to={"/login"}
+                to={"/register"}
                 className="underline-offset-3 p-2 text-base hover:underline"
               >
-                Already registered?{" "}
+                No account?{" "}
                 <span className="font-semibold text-green-500 hover:underline">
-                  Login
+                  Sign up here
                 </span>
               </Link>
             </div>

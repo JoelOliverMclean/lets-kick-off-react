@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import $ from "jquery";
 import { Tooltip } from "react-tooltip";
+import { AuthContext } from "../helpers/AuthContext";
+import { login } from "../api/auth";
+import Cookies from "js-cookie";
+import { Link, useNavigate } from "react-router-dom";
+import pitchBg from "../assets/pitch-bg.jpg";
 
-export default function Registration(props) {
-  const { registerNewUser } = props;
+export default function LoginForm({ loginUser }) {
+  const navigate = useNavigate();
+
+  const { setLoggedInUser, loggedInUser } = useContext(AuthContext);
 
   const [errors, setErrors] = useState({
-    name: "",
     username: "",
     password: "",
-    groupName: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  async function loginUser(data) {
+    var user = await login(data.username, data.password);
+    setLoggedInUser(user);
+    if (user) {
+      navigate("/");
+    }
+  }
 
   function validateForm(e) {
     e.preventDefault();
@@ -21,28 +34,16 @@ export default function Registration(props) {
 
     var newErrors = { ...errors };
 
-    if (data.name.trim().length < 3) {
-      newErrors.name = "Name required. Min length 3.";
-    } else {
-      newErrors.name = "";
-    }
-
-    if (data.username.trim().length < 3) {
-      newErrors.username = "Username required. Min length 3.";
+    if (data.username.trim().length < 1) {
+      newErrors.username = "Username required.";
     } else {
       newErrors.username = "";
     }
 
-    if (data.password.trim().length < 3) {
-      newErrors.password = "Password required. Min length 3.";
+    if (data.password.trim().length < 1) {
+      newErrors.password = "Password required.";
     } else {
       newErrors.password = "";
-    }
-
-    if (data.groupName.trim().length > 0 && data.groupName.trim().length < 3) {
-      newErrors.groupName = "Min length 3.";
-    } else {
-      newErrors.groupName = "";
     }
 
     setErrors(newErrors);
@@ -52,7 +53,7 @@ export default function Registration(props) {
     ).length;
 
     if (errorCount === 0) {
-      registerNewUser(data);
+      loginUser(data);
     }
   }
 
@@ -60,16 +61,6 @@ export default function Registration(props) {
     <form className="" onSubmit={validateForm}>
       <div className="flex flex-col gap-5 text-xl">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="flex flex-col">
-            <label className="p-1 opacity-80 duration-300">Name</label>
-            <input
-              name="name"
-              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
-            />
-            {errors.name.length > 0 && (
-              <p className="px-2 pt-1 text-xs text-orange-400">{errors.name}</p>
-            )}
-          </div>
           <div className="flex flex-col">
             <label className="p-1 opacity-80 duration-300">Username</label>
             <input
@@ -103,37 +94,17 @@ export default function Registration(props) {
             />
             {errors.password.length > 0 && (
               <p className="px-2 pt-1 text-xs text-orange-400">
-                {errors.password}
-              </p>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label className="p-1 opacity-80 duration-300">
-              Group Name{" "}
-              <span className="my-anchor-element text-base opacity-50">
-                (optional)
-              </span>
-              {/* <Tooltip anchorSelect=".my-anchor-element" place="bottom">
-                Group Owners: Enter name of group you run
-              </Tooltip> */}
-            </label>
-            <input
-              name="groupName"
-              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
-            />
-            {errors.groupName.length > 0 && (
-              <p className="px-2 pt-1 text-xs text-orange-400">
-                {errors.groupName}
+                {errors.password}asds
               </p>
             )}
           </div>
         </div>
-        <div className="px-1 duration-200 hover:px-0">
+        <div className="px-1 pt-2 duration-200 hover:px-0">
           <button
-            className="w-full rounded-md bg-green-600 px-2 py-1 font-semibold shadow-lg shadow-black"
+            className="w-full rounded-md bg-green-500 px-2 py-1 font-semibold shadow-lg shadow-black"
             type="submit"
           >
-            Get Started
+            Login
           </button>
         </div>
       </div>

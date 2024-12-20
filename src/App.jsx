@@ -10,11 +10,15 @@ import { getCsrfToken } from "./helpers/NetworkHelper";
 import Group from "./pages/Group";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
+import Registration from "./pages/Registration";
 import AddPlayers from "./pages/AddPlayers";
 import Players from "./pages/Players";
 import PlayerDetail from "./pages/PlayerDetail";
 import EditPlayer from "./pages/EditPlayer";
 import TeamPicker from "./pages/TeamPicker";
+import RatingsReview from "./pages/RatingsReview";
+import RatingsResult from "./pages/RatingsResult";
+import RatingsReviewVote from "./pages/RatingsReviewVote";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -42,8 +46,21 @@ function App() {
               <Route index element={<Home />} />
               <Route path="/account" element={<Account />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Registration />} />
+              <Route
+                path="/ratings-review/vote"
+                element={<RatingsReviewVote />}
+              />
               <Route path="/group/:uuid" element={<Group />} />
               <Route path="/group/:uuid/team-picker" element={<TeamPicker />} />
+              <Route
+                path="/group/:uuid/ratings-review"
+                element={<RatingsReview />}
+              />
+              <Route
+                path="/group/:uuid/ratings-review/result"
+                element={<RatingsResult />}
+              />
               <Route path="/group/:uuid/players" element={<Players />} />
               <Route path="/group/:uuid/players/add" element={<AddPlayers />} />
               <Route

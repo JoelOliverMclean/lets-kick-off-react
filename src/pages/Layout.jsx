@@ -10,7 +10,9 @@ const Layout = () => {
     <>
       <div className="">
         {(loggedInUser ||
-          (location.pathname !== "/" && location.pathname !== "/login")) && (
+          (location.pathname !== "/" &&
+            location.pathname !== "/login" &&
+            location.pathname !== "/register")) && (
           <div className="sticky top-0">
             <div className="flex items-start justify-between bg-gradient-to-b from-slate-800 to-[#121212] p-4">
               <Link to="/" className="flex flex-col">
