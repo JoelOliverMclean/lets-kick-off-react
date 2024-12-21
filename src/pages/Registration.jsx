@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import $ from "jquery";
 import { Tooltip } from "react-tooltip";
 import { AuthContext } from "../helpers/AuthContext";
-import { login } from "../api/auth";
+import { register } from "../api/auth";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import pitchBg from "../assets/pitch-bg.jpg";
