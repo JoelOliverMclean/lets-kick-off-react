@@ -1,19 +1,22 @@
 import Registration from "../components/RegistrationForm";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../helpers/AuthContext";
 import { register } from "../api/auth";
-import { getMyGroups } from "../api/groups";
+import { getMyGroups, postGroup } from "../api/groups";
 import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import pitchBg from "../assets/pitch-bg.jpg";
 import Login from "../components/LoginForm";
 import LoginForm from "../components/LoginForm";
+import ConfirmModal from "../components/ConfirmModal";
 
 const Home = () => {
   const { loggedInUser } = useContext(AuthContext);
   const [groups, setGroups] = useState([]);
   const [loadingGroups, setLoadingGroups] = useState(false);
   const navigate = useNavigate();
+  const [showDialog, setShowDialog] = useState(false);
+  const [newGroupName, setNewGroupName] = useState("");
 
   async function loginUser(data) {
     var user = await login(data.username, data.password);
@@ -23,13 +26,36 @@ const Home = () => {
     }
   }
 
+  const createGroup = () => {
+    postGroup(null, newGroupName).then((result) => {
+      if (result.error) {
+      } else {
+        setNewGroupName("");
+        setShowDialog(false);
+        fetchGroups();
+      }
+    });
+  };
+
+  const newGroupNameChanged = (e) => {
+    setNewGroupName(e.target.value);
+  };
+
+  const showCreateNewGroupDialog = () => {
+    setShowDialog(true);
+  };
+
+  const fetchGroups = () => {
+    getMyGroups().then((groups) => {
+      setGroups(groups);
+      setLoadingGroups(false);
+    });
+  };
+
   useEffect(() => {
     if (loggedInUser) {
       setLoadingGroups(true);
-      getMyGroups().then((groups) => {
-        setGroups(groups);
-        setLoadingGroups(false);
-      });
+      fetchGroups();
     }
   }, [loggedInUser]);
 
@@ -61,18 +87,32 @@ const Home = () => {
                 data-testid="loader"
               />
             ) : (
-              <div className="grid flex-1 grid-cols-1 sm:grid-cols-2">
-                {groups.map((group, index) => (
-                  <Link
-                    to={{
-                      pathname: `/group/${group.uuid}`,
-                    }}
-                    key={index}
-                    className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 p-3 text-center text-xl duration-200 hover:bg-slate-800"
+              <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2">
+                {groups?.length > 0 ? (
+                  groups.map((group, index) => (
+                    <Link
+                      to={{
+                        pathname: `/group/${group.uuid}`,
+                      }}
+                      key={index}
+                      className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 p-3 text-center text-xl duration-200 hover:bg-slate-800"
+                    >
+                      {group.name}
+                    </Link>
+                  ))
+                ) : (
+                  <p className="pb-4 text-center text-xl text-gray-500">
+                    No groups yet
+                  </p>
+                )}
+                <div className="flex w-full justify-center">
+                  <button
+                    className="text-md rounded-md bg-green-600 px-2.5 py-1.5 font-semibold shadow-lg shadow-black"
+                    onClick={() => showCreateNewGroupDialog()}
                   >
-                    {group.name}
-                  </Link>
-                ))}
+                    Create new group
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -112,6 +152,22 @@ const Home = () => {
           </div>
         </div>
       )}
+      <ConfirmModal
+        setShowDialog={setShowDialog}
+        showDialog={showDialog}
+        title={"Name your group"}
+        body={
+          <div className="p-2">
+            <input
+              defaultValue={newGroupName}
+              onChange={newGroupNameChanged}
+              className="rounded-md border-2 border-solid border-transparent px-2 py-1 text-lg duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
+            />
+          </div>
+        }
+        acceptAction={createGroup}
+        acceptButton={"Create"}
+      />
     </div>
   );
 };
