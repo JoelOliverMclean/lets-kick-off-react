@@ -152,64 +152,66 @@ export default function RatingsReviewVote() {
         onSubmit={handleVotingForm}
       >
         <div className="flex flex-col gap-2">
-          {review?.players?.map((player) => (
-            <div key={player.uuid} className={`flex flex-col rounded-md`}>
-              <div className="text-xl font-semibold">
-                <div className="px-2 pb-1">{player.name}</div>
-                {/* <div className="border border-green-500"></div> */}
+          {review?.players
+            ?.filter((p) => player.uuid !== voter.uuid)
+            ?.map((player) => (
+              <div key={player.uuid} className={`flex flex-col rounded-md`}>
+                <div className="text-xl font-semibold">
+                  <div className="px-2 pb-1">{player.name}</div>
+                  {/* <div className="border border-green-500"></div> */}
+                </div>
+                <div className="flex justify-between rounded-lg bg-green-800 px-2 py-3 text-center text-sm shadow shadow-black">
+                  <div className="flex flex-col gap-1 px-1">
+                    <div>Rating</div>
+                    <select
+                      name={`rating_${player.uuid}`}
+                      className="rounded-md border-0 border-solid border-transparent px-1 py-1 duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
+                    >
+                      <option value={null}>-</option>
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rating) => (
+                        <option value={rating} key={rating}>
+                          {rating}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-1 px-1">
+                    <div>Playstyle</div>
+                    <select
+                      name={`playstyle_${player.uuid}`}
+                      className="rounded-md border-0 border-solid border-transparent px-1 py-1 duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
+                    >
+                      <option value={null}>-</option>
+                      {[
+                        "Deep Defender",
+                        "Defensive",
+                        "Mixed",
+                        "Attacking",
+                        "Goal Scorer",
+                      ].map((playStyle, index) => (
+                        <option value={index - 2} key={index}>
+                          {playStyle}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-1 px-1">
+                    <div>Good in goal?</div>
+                    <select
+                      name={`goodInGoal_${player.uuid}`}
+                      className="rounded-md border-0 border-solid border-transparent px-1 py-1 duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
+                    >
+                      <option value={null}>-</option>
+                      {["Yes", "No"].map((goodInGoalOption, index) => (
+                        <option value={goodInGoalOption === "Yes"} key={index}>
+                          {goodInGoalOption}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between rounded-lg bg-green-800 px-2 py-3 text-center text-sm shadow shadow-black">
-                <div className="flex flex-col gap-1 px-1">
-                  <div>Rating</div>
-                  <select
-                    name={`rating_${player.uuid}`}
-                    className="rounded-md border-0 border-solid border-transparent px-1 py-1 duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
-                  >
-                    <option value={null}>-</option>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rating) => (
-                      <option value={rating} key={rating}>
-                        {rating}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-1 px-1">
-                  <div>Playstyle</div>
-                  <select
-                    name={`playstyle_${player.uuid}`}
-                    className="rounded-md border-0 border-solid border-transparent px-1 py-1 duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
-                  >
-                    <option value={null}>-</option>
-                    {[
-                      "Deep Defender",
-                      "Defensive",
-                      "Mixed",
-                      "Attacking",
-                      "Goal Scorer",
-                    ].map((playStyle, index) => (
-                      <option value={index - 2} key={index}>
-                        {playStyle}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-1 px-1">
-                  <div>Good in goal?</div>
-                  <select
-                    name={`goodInGoal_${player.uuid}`}
-                    className="rounded-md border-0 border-solid border-transparent px-1 py-1 duration-300 focus:border-green-500 focus:outline-none focus:ring-0"
-                  >
-                    <option value={null}>-</option>
-                    {["Yes", "No"].map((goodInGoalOption, index) => (
-                      <option value={goodInGoalOption === "Yes"} key={index}>
-                        {goodInGoalOption}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
         <div className="px-1 pt-5 duration-200 hover:px-0">
           <button
