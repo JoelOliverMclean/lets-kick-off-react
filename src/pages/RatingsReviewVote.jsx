@@ -153,7 +153,7 @@ export default function RatingsReviewVote() {
       >
         <div className="flex flex-col gap-2">
           {review?.players
-            ?.filter((p) => player.uuid !== voter.uuid)
+            ?.filter((p) => p.uuid !== voter.uuid)
             ?.map((player) => (
               <div key={player.uuid} className={`flex flex-col rounded-md`}>
                 <div className="text-xl font-semibold">
