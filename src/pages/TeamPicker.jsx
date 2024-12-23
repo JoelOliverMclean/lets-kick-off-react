@@ -325,7 +325,9 @@ export default function TeamPicker() {
                     onClick={generateTeams}
                     className="rounded-md bg-green-600 px-4 py-2 text-xl font-semibold shadow-md shadow-black"
                   >
-                    Pick Teams
+                    Pick Teams{" "}
+                    {selectedPlayers.length > 0 &&
+                      `(${selectedPlayers.length})`}
                   </button>
                 </div>
               </div>
