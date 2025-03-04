@@ -1,6 +1,12 @@
-import { Link, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const NoPage = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("/");
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-1 flex-col items-center justify-start gap-5 p-10 sm:justify-center sm:p-4">
       <h1 className="text-2xl">404 - Page not found</h1>

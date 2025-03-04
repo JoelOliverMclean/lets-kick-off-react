@@ -44,7 +44,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="/account" element={<Account />} />
+              {/* <Route path="/account" element={<Account />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Registration />} />
               <Route
@@ -70,7 +70,7 @@ function App() {
               <Route
                 path="/group/:uuid/players/detail/:name/edit"
                 element={<EditPlayer />}
-              />
+              /> */}
               <Route path="*" element={<NoPage />} />
             </Route>
           </Routes>

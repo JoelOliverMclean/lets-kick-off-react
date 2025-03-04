@@ -9,8 +9,11 @@ import pitchBg from "../assets/pitch-bg.jpg";
 import Login from "../components/LoginForm";
 import LoginForm from "../components/LoginForm";
 import ConfirmModal from "../components/ConfirmModal";
+import MaintenanceScreen from "../components/MaintenanceScreen";
 
 const Home = () => {
+  return <MaintenanceScreen />;
+
   const { loggedInUser } = useContext(AuthContext);
   const [groups, setGroups] = useState([]);
   const [loadingGroups, setLoadingGroups] = useState(false);
