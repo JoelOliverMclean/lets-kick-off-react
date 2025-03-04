@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { getReviewToVote, vote } from "../api/ratingsReview";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
@@ -12,6 +12,7 @@ import {
 } from "@headlessui/react";
 
 export default function RatingsReviewVote() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [loading, setLoading] = useState(false);
@@ -283,38 +284,45 @@ export default function RatingsReviewVote() {
   };
 
   function fetchReview() {
-    getReviewToVote(searchParams.get("id")).then((result) => {
-      if (result.error) {
-        setConcluded(true);
-      } else {
-        setReview(result);
-        const voted = Cookies.get(`voted_${searchParams.get("id")}`);
-        if (voted) {
-          goToStep(2);
+    var id = searchParams.get("id");
+    if (id) {
+      getReviewToVote(searchParams.get("id")).then((result) => {
+        if (result.error) {
+          setConcluded(true);
         } else {
-          const votingAsUuid = Cookies.get(
-            `votingAs_${searchParams.get("id")}`,
-          );
-          if (
-            votingAsUuid &&
-            result.players.some((p) => p.uuid === votingAsUuid)
-          ) {
-            const votingAs = result.players.find(
-              (p) => p.uuid === votingAsUuid,
-            );
-            if (result.players_available.some((p) => p.uuid === votingAsUuid)) {
-              setVoter(votingAs);
-              goToStep(1, votingAs);
-            } else {
-              Cookies.set(`voted_${searchParams.get("id")}`, true);
-              goToStep(2);
-            }
+          setReview(result);
+          const voted = Cookies.get(`voted_${searchParams.get("id")}`);
+          if (voted) {
+            goToStep(2);
           } else {
-            goToStep(0);
+            const votingAsUuid = Cookies.get(
+              `votingAs_${searchParams.get("id")}`,
+            );
+            if (
+              votingAsUuid &&
+              result.players.some((p) => p.uuid === votingAsUuid)
+            ) {
+              const votingAs = result.players.find(
+                (p) => p.uuid === votingAsUuid,
+              );
+              if (
+                result.players_available.some((p) => p.uuid === votingAsUuid)
+              ) {
+                setVoter(votingAs);
+                goToStep(1, votingAs);
+              } else {
+                Cookies.set(`voted_${searchParams.get("id")}`, true);
+                goToStep(2);
+              }
+            } else {
+              goToStep(0);
+            }
           }
         }
-      }
-    });
+      });
+    } else {
+      navigate("/");
+    }
   }
 
   useEffect(fetchReview, []);
