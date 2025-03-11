@@ -2,8 +2,9 @@ import { apiDelete, apiGet, apiPost } from "../helpers/NetworkHelper";
 
 export async function getLatestReview(groupUuid) {
   const response = await apiGet(`ratings_review/latest/${groupUuid}`);
+  console.log(response);
   if (response.status === 200) {
-    return response.data;
+    return response.data.latestReview;
   } else {
     console.log(response.data.error);
     return { error: response.data.error };
