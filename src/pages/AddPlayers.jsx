@@ -50,7 +50,7 @@ export default function AddPlayers() {
       data.playStyle,
       data.goodInGoal,
       uuid,
-    ).then((player, error) => {
+    ).then(({ player, error }) => {
       if (player) {
         setApiError("");
         if (addAnother) {
