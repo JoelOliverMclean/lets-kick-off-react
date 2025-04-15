@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { getGroup } from "../api/groups";
 import { ClipLoader } from "react-spinners";
 import { generateTeamsApi } from "../api/teamPicker";
@@ -16,6 +16,9 @@ import {
 
 export default function TeamPicker() {
   const { uuid } = useParams();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const accessToken = searchParams.get("accessToken");
 
   // const methodChoice = localStorage.getItem("methodChoice") ?? null;
 
@@ -160,7 +163,7 @@ export default function TeamPicker() {
 
   useEffect(() => {
     setLoading(true);
-    getGroup(uuid).then((group) => {
+    getGroup(uuid, accessToken).then((group) => {
       setGroup(group);
       setLoading(false);
     });
@@ -288,7 +291,7 @@ export default function TeamPicker() {
             <h2 className="text-3xl">
               Team<span className="font-semibold text-green-500">Picker</span>
             </h2>
-            {teams && step === "teams" && (
+            {teams && step === "teams" && !accessToken && (
               <div
                 className="text-xl text-green-500"
                 onClick={() => setShowDialog(true)}
