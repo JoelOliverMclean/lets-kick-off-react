@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getGroup } from "../api/groups";
+import { generateAccessToken, getGroup } from "../api/groups";
 import { ClipLoader } from "react-spinners";
 
 export default function Group() {
@@ -14,6 +14,23 @@ export default function Group() {
     getGroup(uuid).then((group) => {
       setGroup(group);
       setLoading(false);
+    });
+  }, []);
+
+  const shareTeamPickerAccess = useCallback(() => {
+    generateAccessToken(uuid).then((data) => {
+      if (data != null) {
+        const { accessToken } = data;
+        navigator.clipboard
+          .writeText(
+            `${window.location.origin}/group/${uuid}/team-picker?accessToken=${accessToken}`,
+          )
+          .then(() => {
+            alert("Access token copied to clipboard!");
+          });
+      } else {
+        alert("Failed to generate access token. Please try again.");
+      }
     });
   }, []);
 
@@ -59,6 +76,12 @@ export default function Group() {
               >
                 Ratings Review
               </Link>
+              <button
+                onClick={() => shareTeamPickerAccess()}
+                className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 py-3 text-center text-xl hover:bg-slate-800"
+              >
+                Share Team Picker Access
+              </button>
               {/* <Link className="rounded-lg border-2 border-solid border-green-500 bg-slate-900 py-3 text-center text-xl hover:bg-slate-800">
                 Matches
               </Link> */}
