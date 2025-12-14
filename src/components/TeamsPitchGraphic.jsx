@@ -52,7 +52,7 @@ export default function TeamsPitchGraphic({
             style={index === 0 ? homeStyle : awayStyle}
             className={`pitch-player-indicator`}
           ></div>
-          <div className="pitch-player-name text-sm font-medium">{p.name}</div>
+          <div className="pitch-player-name text-sm font-medium text-center">{p.name}</div>
         </div>
       );
       if (
