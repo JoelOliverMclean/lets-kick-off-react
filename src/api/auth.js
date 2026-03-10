@@ -1,4 +1,5 @@
 import { apiGet, apiPost } from "../helpers/NetworkHelper";
+import Cookies from "js-cookie";
 
 export async function login(username, password) {
   var response = await apiPost("auth/login", {

@@ -169,6 +169,42 @@ export default function TeamPicker() {
     });
   }, []);
 
+  const bibsTotalRating = Number(
+    teams?.team2?.reduce(
+      (acc, player) => {
+        acc += player.rating;
+        return acc;
+      },
+      0,
+    ),
+  );
+
+  const bibsAvgRating = Number(
+    teams?.team2?.reduce((acc, player, index, array) => {
+      acc += player.rating;
+      if (index === array.length - 1) {
+        return acc / array.length;
+      }
+      return acc;
+    }, 0),
+  );
+
+  const shirtsTotalRating = Number(
+    teams?.team1?.reduce((acc, player) => {
+      acc += player.rating;
+      return acc;
+    }, 0),
+  );
+
+  const shirtsAvgRating = Number(
+    teams?.team1?.length
+      ? teams.team1.reduce(
+          (acc, player) => acc + Number(player.rating || 0),
+          0,
+        ) / teams.team1.length
+      : 0,
+  );
+
   const teamsInfoModal = (
     <Dialog open={showDialog} onClose={setShowDialog} className="relative z-10">
       <DialogBackdrop
@@ -193,60 +229,52 @@ export default function TeamPicker() {
                   </DialogTitle>
                   <div className="mt-2 flex justify-center">
                     <table className="w-[75%]">
-                      <tr>
-                        <td className="text-start">Shirts Avg. Rating</td>
-                        <td className="text-end">
-                          {teams?.team1?.reduce((acc, player, index, array) => {
-                            acc += player.rating;
-                            if (index === array.length - 1) {
-                              return acc / array.length;
-                            }
-                            return acc;
-                          }, 0)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-start">Bibs Avg. Rating</td>
-                        <td className="text-end">
-                          {teams?.team2?.reduce((acc, player, index, array) => {
-                            acc += player.rating;
-                            if (index === array.length - 1) {
-                              return acc / array.length;
-                            }
-                            return acc;
-                          }, 0)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-start">Shirts Total Rating</td>
-                        <td className="text-end">
-                          {teams?.team1?.reduce((acc, player, index, array) => {
-                            acc += player.rating;
-                            return acc;
-                          }, 0)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-start">Bibs Total Rating</td>
-                        <td className="text-end">
-                          {teams?.team2?.reduce((acc, player, index, array) => {
-                            acc += player.rating;
-                            return acc;
-                          }, 0)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-start">Avg. Rating Diff:</td>
-                        <td className="text-end">{teams?.avgDiff}</td>
-                      </tr>
-                      <tr>
-                        <td className="text-start">Total Rating Diff:</td>
-                        <td className="text-end">{teams?.totalDiff}</td>
-                      </tr>
-                      <tr>
-                        <td className="text-start">Goalie Diff:</td>
-                        <td className="text-end">{teams?.gkDiff}</td>
-                      </tr>
+                      <tbody>
+                        <tr>
+                          <td className="text-start">Shirts Avg. Rating</td>
+                          <td className="text-end">
+                            {shirtsAvgRating % 1 === 0
+                              ? shirtsAvgRating
+                              : shirtsAvgRating.toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-start">Bibs Avg. Rating</td>
+                          <td className="text-end">
+                            {bibsAvgRating % 1 === 0
+                              ? bibsAvgRating
+                              : bibsAvgRating.toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-start">Shirts Total Rating</td>
+                          <td className="text-end">
+                            {shirtsTotalRating % 1 === 0
+                              ? shirtsTotalRating
+                              : shirtsTotalRating.toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-start">Bibs Total Rating</td>
+                          <td className="text-end">
+                            {bibsTotalRating % 1 === 0
+                              ? bibsTotalRating
+                              : bibsTotalRating.toFixed(2)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-start">Avg. Rating Diff:</td>
+                          <td className="text-end">{teams?.avgDiff}</td>
+                        </tr>
+                        <tr>
+                          <td className="text-start">Total Rating Diff:</td>
+                          <td className="text-end">{teams?.totalDiff}</td>
+                        </tr>
+                        <tr>
+                          <td className="text-start">Goalie Diff:</td>
+                          <td className="text-end">{teams?.gkDiff}</td>
+                        </tr>
+                      </tbody>
                     </table>
                   </div>
                 </div>
