@@ -33,8 +33,21 @@ export default function TeamPicker() {
 
   const teamsGraphicRef = useRef(null);
 
-  const sharePng = async (pngBlob, filename, title, text) => {
-    const file = new File([pngBlob], filename, { type: "image/png" });
+  const [shareImage, setShareImage] = useState(null); // { dataUrl, blob, filename } | null
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  const sharePng = async (blob, dataUrl, filename, title, text) => {
+    const file = new File([blob], filename, { type: "image/png" });
     const shareData = { files: [file], title, text };
 
     const canShareFiles =
@@ -47,32 +60,30 @@ export default function TeamPicker() {
         await navigator.share(shareData);
         return;
       } catch (error) {
-        if (error.name === "AbortError") return; // user just closed the share sheet
+        if (error.name === "AbortError") return; // user cancelled the native sheet, do nothing
         console.error(error);
-        // fall through to the download fallback below
+        // fall through to the manual modal below
       }
     }
 
-    // Firefox (desktop + Android) doesn't support file sharing via the
-    // Web Share API at all, so it always lands here.
-    downloadBlob(pngBlob, filename);
-    toast.success("Image downloaded", {
-      theme: "dark",
-      autoClose: 2000,
-      pauseOnFocusLoss: false,
-    });
+    // Firefox etc: no file-sharing API. Show the image itself —
+    // long-press/right-click "Copy/Save Image" is a native browser
+    // feature that works on any real <img>, no JS API required.
+    setShareImage({ dataUrl, blob, filename });
   };
 
-  function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-  }
+  const shareTeamGraphic = useCallback(async () => {
+    const dataUrl = await buildPng(teamsGraphicRef.current);
+    const img = await fetch(dataUrl);
+    const blob = await img.blob();
+    await sharePng(
+      blob,
+      dataUrl,
+      `teams_${moment().format("YYYY-MM-DD")}.png`,
+      "Teams",
+      "Here are today's teams!",
+    );
+  }, [teamsGraphicRef]);
 
   const buildPng = async (element) => {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -304,6 +315,61 @@ export default function TeamPicker() {
     </Dialog>
   );
 
+  const shareImageModal = (
+    <Dialog
+      open={!!shareImage}
+      onClose={() => setShareImage(null)}
+      className="relative z-10"
+    >
+      <DialogBackdrop
+        transition
+        className="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+      />
+      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <DialogPanel
+            transition
+            className="relative w-full max-w-sm transform overflow-hidden rounded-lg border-solid bg-gradient-to-b from-slate-800 to-[#121212] px-4 py-4 text-left shadow-xl ring-2 ring-green-500 transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+          >
+            <DialogTitle
+              as="h3"
+              className="text-xl font-semibold leading-6 text-green-500"
+            >
+              Save your teams
+            </DialogTitle>
+            <p className="mt-2 text-sm text-gray-400">
+              Your browser can't share this directly. Press and hold the image
+              to copy or save it, or download it below.
+            </p>
+            {shareImage && (
+              <img
+                src={shareImage.dataUrl}
+                alt="Teams graphic"
+                className="mt-4 w-full rounded-lg"
+              />
+            )}
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <button
+                onClick={() =>
+                  downloadBlob(shareImage.blob, shareImage.filename)
+                }
+                className="rounded-md bg-green-600 px-3 py-2 shadow-md shadow-black"
+              >
+                Download
+              </button>
+              <button
+                onClick={() => setShareImage(null)}
+                className="rounded-md border-2 border-green-600 bg-transparent px-3 py-2 shadow-md shadow-black"
+              >
+                Close
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </div>
+    </Dialog>
+  );
+
   return (
     <div className="px-4">
       {loading ? (
@@ -489,6 +555,7 @@ export default function TeamPicker() {
         </div>
       )}
       {teamsInfoModal}
+      {shareImageModal}
     </div>
   );
 }
