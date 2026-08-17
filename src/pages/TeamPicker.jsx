@@ -417,18 +417,20 @@ export default function TeamPicker() {
               >
                 <h3 className="text-xl font-semibold">{"Who's available?"}</h3>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  {group?.players?.sort((a,b) => a.name - b.name)?.map((player, index) => (
-                    <div
-                      onClick={() => togglePlayerAvailable(player.uuid)}
-                      className={
-                        "rounded-lg border-2 border-solid bg-gradient-to-r from-slate-800 to-[#121212] px-3 py-2 " +
-                        `${selectedPlayers.includes(player.uuid) ? "border-green-500" : "border-[#121212]"}`
-                      }
-                      key={index}
-                    >
-                      {player.name}
-                    </div>
-                  ))}
+                  {group?.players
+                    ?.sort((a, b) => String(a.name).localeCompare(b.name))
+                    ?.map((player, index) => (
+                      <div
+                        onClick={() => togglePlayerAvailable(player.uuid)}
+                        className={
+                          "rounded-lg border-2 border-solid bg-gradient-to-r from-slate-800 to-[#121212] px-3 py-2 " +
+                          `${selectedPlayers.includes(player.uuid) ? "border-green-500" : "border-[#121212]"}`
+                        }
+                        key={index}
+                      >
+                        {player.name}
+                      </div>
+                    ))}
                 </div>
                 <div className="sticky bottom-0 flex flex-col items-center justify-center gap-4 p-2">
                   <button
