@@ -34,37 +34,45 @@ export default function TeamPicker() {
   const teamsGraphicRef = useRef(null);
 
   const sharePng = async (pngBlob, filename, title, text) => {
-    try {
-      const shareData = {
-        files: [
-          new File([pngBlob], filename, {
-            type: "image/png",
-          }),
-        ],
-        title,
-        text,
-      };
-      if (navigator.canShare(shareData)) {
-        console.log("Attempting to share");
+    const file = new File([pngBlob], filename, { type: "image/png" });
+    const shareData = { files: [file], title, text };
+
+    const canShareFiles =
+      typeof navigator.share === "function" &&
+      typeof navigator.canShare === "function" &&
+      navigator.canShare(shareData);
+
+    if (canShareFiles) {
+      try {
         await navigator.share(shareData);
-      } else {
-        toast.error("Can't share, tap me to download", {
-          autoClose: 2500,
-          pauseOnFocusLoss: false,
-          theme: "dark",
-          onClick: async () => {
-            await navigator.clipboard.write([
-              new ClipboardItem({
-                [pngBlob.type]: pngBlob,
-              }),
-            ]);
-          },
-        });
+        return;
+      } catch (error) {
+        if (error.name === "AbortError") return; // user just closed the share sheet
+        console.error(error);
+        // fall through to the download fallback below
       }
-    } catch (error) {
-      console.error(error);
     }
+
+    // Firefox (desktop + Android) doesn't support file sharing via the
+    // Web Share API at all, so it always lands here.
+    downloadBlob(pngBlob, filename);
+    toast.success("Image downloaded", {
+      theme: "dark",
+      autoClose: 2000,
+      pauseOnFocusLoss: false,
+    });
   };
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
 
   const buildPng = async (element) => {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
