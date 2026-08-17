@@ -415,9 +415,9 @@ export default function TeamPicker() {
                   `${step === "players" ? "visible" : "hide"}`
                 }
               >
-                <h3 className="text-xl font-semibold">Who's available?</h3>
+                <h3 className="text-xl font-semibold">{"Who's available?"}</h3>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  {group?.players?.map((player, index) => (
+                  {group?.players?.sort((a,b) => a.name - b.name)?.map((player, index) => (
                     <div
                       onClick={() => togglePlayerAvailable(player.uuid)}
                       className={
