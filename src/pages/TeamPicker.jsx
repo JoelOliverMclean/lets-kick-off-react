@@ -29,12 +29,17 @@ export default function TeamPicker() {
   const [teams, setTeams] = useState(null);
   const [generating, setGenerating] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+  // Fallback state for browsers (Firefox) that can't share files via the
+  // Web Share API. Holds { dataUrl, blob, filename } so we can render the
+  // image for long-press/right-click copy, or offer a plain download.
+  const [shareImage, setShareImage] = useState(null);
   // const [method, setMethod] = useState(methodChoice);
 
   const teamsGraphicRef = useRef(null);
 
-  const [shareImage, setShareImage] = useState(null); // { dataUrl, blob, filename } | null
-
+  // Triggers a standard browser file download from a Blob. Works
+  // everywhere (no exotic clipboard/share APIs required), so this is
+  // our universal fallback action.
   function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -50,6 +55,9 @@ export default function TeamPicker() {
     const file = new File([blob], filename, { type: "image/png" });
     const shareData = { files: [file], title, text };
 
+    // typeof-checking canShare (rather than just truthiness) makes sure
+    // it's actually callable before we call it - some browsers expose
+    // navigator.canShare as undefined, which would throw otherwise.
     const canShareFiles =
       typeof navigator.share === "function" &&
       typeof navigator.canShare === "function" &&
@@ -60,30 +68,22 @@ export default function TeamPicker() {
         await navigator.share(shareData);
         return;
       } catch (error) {
-        if (error.name === "AbortError") return; // user cancelled the native sheet, do nothing
+        if (error.name === "AbortError") {
+          // User closed the native share sheet themselves - not an error.
+          return;
+        }
         console.error(error);
-        // fall through to the manual modal below
+        // Fall through to the manual fallback below.
       }
     }
 
-    // Firefox etc: no file-sharing API. Show the image itself —
-    // long-press/right-click "Copy/Save Image" is a native browser
-    // feature that works on any real <img>, no JS API required.
+    // Browsers without file-sharing support (e.g. Firefox, desktop and
+    // Android) land here. Rather than fight the missing API, show the
+    // image itself - long-press/right-click "Copy/Save Image" is a
+    // native browser feature that works on any real <img>, no JS
+    // clipboard or share API required.
     setShareImage({ dataUrl, blob, filename });
   };
-
-  const shareTeamGraphic = useCallback(async () => {
-    const dataUrl = await buildPng(teamsGraphicRef.current);
-    const img = await fetch(dataUrl);
-    const blob = await img.blob();
-    await sharePng(
-      blob,
-      dataUrl,
-      `teams_${moment().format("YYYY-MM-DD")}.png`,
-      "Teams",
-      "Here are today's teams!",
-    );
-  }, [teamsGraphicRef]);
 
   const buildPng = async (element) => {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -113,11 +113,12 @@ export default function TeamPicker() {
   }, [teams]);
 
   const shareTeamGraphic = useCallback(async () => {
-    var dataUrl = await buildPng(teamsGraphicRef.current);
-    var img = await fetch(dataUrl);
-    var blob = await img.blob();
-    sharePng(
+    const dataUrl = await buildPng(teamsGraphicRef.current);
+    const img = await fetch(dataUrl);
+    const blob = await img.blob();
+    await sharePng(
       blob,
+      dataUrl,
       `teams_${moment().format("YYYY-MM-DD")}.png`,
       "Teams",
       "Here are today's teams!",
@@ -189,13 +190,10 @@ export default function TeamPicker() {
   }, []);
 
   const bibsTotalRating = Number(
-    teams?.team2?.reduce(
-      (acc, player) => {
-        acc += player.rating;
-        return acc;
-      },
-      0,
-    ),
+    teams?.team2?.reduce((acc, player) => {
+      acc += player.rating;
+      return acc;
+    }, 0),
   );
 
   const bibsAvgRating = Number(
@@ -315,6 +313,12 @@ export default function TeamPicker() {
     </Dialog>
   );
 
+  // Fallback modal shown when the Web Share API can't share files
+  // (notably Firefox, which has never implemented the `files` part of
+  // navigator.share/canShare). Displays the actual PNG in an <img> so
+  // the browser's own native long-press (mobile) or right-click
+  // (desktop) "Copy/Save Image" works, plus a manual download button
+  // for a route that works regardless of browser.
   const shareImageModal = (
     <Dialog
       open={!!shareImage}
@@ -325,6 +329,7 @@ export default function TeamPicker() {
         transition
         className="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
       />
+
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center">
           <DialogPanel
