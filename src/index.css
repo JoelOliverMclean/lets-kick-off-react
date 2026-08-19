@@ -308,3 +308,14 @@ input:checked + .slider-sm:before {
 .step.fade-out {
   opacity: 0;
 }
+
+.wobble {
+  animation: wobble 1s ease-in-out infinite;
+  transform-origin: 50% 100%; /* pivot from the bottom-center, like it's rocking on a base */
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-3deg); }
+  75%      { transform: rotate(3deg); }
+}

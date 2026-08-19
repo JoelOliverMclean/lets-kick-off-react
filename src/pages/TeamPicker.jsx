@@ -29,6 +29,7 @@ export default function TeamPicker() {
   const [teams, setTeams] = useState(null);
   const [generating, setGenerating] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+  const [makingChanges, setMakingChanges] = useState(false);
   // Fallback state for browsers (Firefox) that can't share files via the
   // Web Share API. Holds { dataUrl, blob, filename } so we can render the
   // image for long-press/right-click copy, or offer a plain download.
@@ -181,6 +182,34 @@ export default function TeamPicker() {
     setStep("players");
   }, [setStep]);
 
+  // Moves a player from the team they're currently on to the other one.
+  // fromTeamIndex is 0 for team1 (Shirts/home) or 1 for team2 (Bibs/away),
+  // matching the `index` TeamsPitchGraphic already uses internally.
+  //
+  // We use the functional setState form (prevTeams => ...) rather than
+  // reading `teams` directly, so this always operates on the freshest
+  // state even if multiple updates were queued in the same tick - and it
+  // does the remove + add as one atomic state change instead of two.
+  const movePlayerToOppositeTeam = useCallback((player, fromTeamIndex) => {
+    if (!makingChanges) return;
+    setTeams((prevTeams) => {
+      if (!prevTeams) return prevTeams;
+
+      const fromKey = fromTeamIndex === 0 ? "team1" : "team2";
+      const toKey = fromTeamIndex === 0 ? "team2" : "team1";
+
+      // Matching on name because that's what the rest of this component
+      // already treats as the unique identifier for a player within a
+      // team (see the `key={p.name}` usage in TeamsPitchGraphic). If two
+      // players can share a name, this should be switched to a uuid.
+      return {
+        ...prevTeams,
+        [fromKey]: prevTeams[fromKey].filter((p) => p.name !== player.name),
+        [toKey]: [...prevTeams[toKey], player],
+      };
+    });
+  }, [makingChanges]);
+
   useEffect(() => {
     setLoading(true);
     getGroup(uuid, accessToken).then((group) => {
@@ -216,9 +245,9 @@ export default function TeamPicker() {
   const shirtsAvgRating = Number(
     teams?.team1?.length
       ? teams.team1.reduce(
-          (acc, player) => acc + Number(player.rating || 0),
-          0,
-        ) / teams.team1.length
+      (acc, player) => acc + Number(player.rating || 0),
+      0,
+    ) / teams.team1.length
       : 0,
   );
 
@@ -247,50 +276,50 @@ export default function TeamPicker() {
                   <div className="mt-2 flex justify-center">
                     <table className="w-[75%]">
                       <tbody>
-                        <tr>
-                          <td className="text-start">Shirts Avg. Rating</td>
-                          <td className="text-end">
-                            {shirtsAvgRating % 1 === 0
-                              ? shirtsAvgRating
-                              : shirtsAvgRating.toFixed(2)}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-start">Bibs Avg. Rating</td>
-                          <td className="text-end">
-                            {bibsAvgRating % 1 === 0
-                              ? bibsAvgRating
-                              : bibsAvgRating.toFixed(2)}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-start">Shirts Total Rating</td>
-                          <td className="text-end">
-                            {shirtsTotalRating % 1 === 0
-                              ? shirtsTotalRating
-                              : shirtsTotalRating.toFixed(2)}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-start">Bibs Total Rating</td>
-                          <td className="text-end">
-                            {bibsTotalRating % 1 === 0
-                              ? bibsTotalRating
-                              : bibsTotalRating.toFixed(2)}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-start">Avg. Rating Diff:</td>
-                          <td className="text-end">{teams?.avgDiff}</td>
-                        </tr>
-                        <tr>
-                          <td className="text-start">Total Rating Diff:</td>
-                          <td className="text-end">{teams?.totalDiff}</td>
-                        </tr>
-                        <tr>
-                          <td className="text-start">Goalie Diff:</td>
-                          <td className="text-end">{teams?.gkDiff}</td>
-                        </tr>
+                      <tr>
+                        <td className="text-start">Shirts Avg. Rating</td>
+                        <td className="text-end">
+                          {shirtsAvgRating % 1 === 0
+                            ? shirtsAvgRating
+                            : shirtsAvgRating.toFixed(2)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="text-start">Bibs Avg. Rating</td>
+                        <td className="text-end">
+                          {bibsAvgRating % 1 === 0
+                            ? bibsAvgRating
+                            : bibsAvgRating.toFixed(2)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="text-start">Shirts Total Rating</td>
+                        <td className="text-end">
+                          {shirtsTotalRating % 1 === 0
+                            ? shirtsTotalRating
+                            : shirtsTotalRating.toFixed(2)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="text-start">Bibs Total Rating</td>
+                        <td className="text-end">
+                          {bibsTotalRating % 1 === 0
+                            ? bibsTotalRating
+                            : bibsTotalRating.toFixed(2)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="text-start">Avg. Rating Diff:</td>
+                        <td className="text-end">{teams?.avgDiff}</td>
+                      </tr>
+                      <tr>
+                        <td className="text-start">Total Rating Diff:</td>
+                        <td className="text-end">{teams?.totalDiff}</td>
+                      </tr>
+                      <tr>
+                        <td className="text-start">Goalie Diff:</td>
+                        <td className="text-end">{teams?.gkDiff}</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -444,45 +473,6 @@ export default function TeamPicker() {
                 </div>
               </div>
             )}
-            {/* {step === "method" && (
-              <div
-                className={
-                  "fadeInOut absolute bottom-0 left-0 right-0 top-0 flex flex-col gap-3 " +
-                  `${step === "method" ? "visible" : "hide"}`
-                }
-              >
-                <h3 className="text-xl font-semibold">
-                  How do you prefer to pick?
-                </h3>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  <button
-                    onClick={() => pickMethod("total")}
-                    className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
-                  >
-                    Total Rating
-                  </button>
-                  <button
-                    onClick={() => pickMethod("average")}
-                    className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
-                  >
-                    Average Rating
-                  </button>
-                  <button
-                    onClick={() => pickMethod("combination")}
-                    className="rounded-lg border-2 border-solid border-green-500 px-3 py-2 hover:bg-slate-900"
-                  >
-                    Combination
-                  </button>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <label className="text-sm">Remember my choice?</label>
-                  <label className="switch switch-sm">
-                    <input type="checkbox" id="rememberMethodChoice" />
-                    <span className="slider-sm rounded-md before:rounded-md"></span>
-                  </label>
-                </div>
-              </div>
-            )} */}
             {(step === "generating" || step === "teams") && (
               <>
                 <div
@@ -518,8 +508,9 @@ export default function TeamPicker() {
                         <TeamsPitchGraphic
                           team1={teams?.team1}
                           team2={teams?.team2}
-                          onPlayerClick={() => {}}
+                          onPlayerClick={movePlayerToOppositeTeam}
                           small={false}
+                          makingChanges={makingChanges}
                         />
                       )}
                     </div>
@@ -554,6 +545,12 @@ export default function TeamPicker() {
                         Regenerate
                       </button>
                     </div>
+                    <button
+                      onClick={() => setMakingChanges(!makingChanges)}
+                      className="w-full rounded-md border-2 border-green-600 bg-transparent px-3 py-2 shadow-md shadow-black"
+                    >
+                      {makingChanges ? "Finish Tinkering" : "Tinker"}
+                    </button>
                   </div>
                 </div>
               </>

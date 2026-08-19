@@ -34,6 +34,7 @@ export default function TeamsPitchGraphic({
   onPlayerClick,
   small,
   showPlayerList = true,
+  makingChanges = false,
 }) {
   const { breakpoint } = useContext(AuthContext);
 
@@ -47,12 +48,18 @@ export default function TeamsPitchGraphic({
     let rows = [];
     team.forEach((p) => {
       var player = (
-        <div key={p.name} className="pitch-player">
+        <div
+          key={p.name}
+          className={`pitch-player cursor-pointer ${makingChanges ? "wobble" : ""}`}
+          onClick={() => onPlayerClick?.(p, index)}
+        >
           <div
             style={index === 0 ? homeStyle : awayStyle}
             className={`pitch-player-indicator`}
           ></div>
-          <div className="pitch-player-name text-sm font-medium text-center">{p.name}</div>
+          <div className="pitch-player-name text-center text-sm font-medium">
+            {p.name}
+          </div>
         </div>
       );
       if (
@@ -120,7 +127,7 @@ export default function TeamsPitchGraphic({
   };
 
   return (
-    <div className={"pitch-wrapper-wrapper rounded-xl py-1"}>
+    <div className={"pitch-wrapper-wrapper select-none rounded-xl py-1"}>
       {showPlayerList && (
         <div className="team-list flex flex-col pe-1 ps-2 text-end">
           <div className="team-list-name text-lg font-semibold">Shirts</div>
