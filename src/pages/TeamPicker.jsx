@@ -452,7 +452,7 @@ export default function TeamPicker() {
                       <div
                         onClick={() => togglePlayerAvailable(player.uuid)}
                         className={
-                          "rounded-lg border-2 border-solid bg-gradient-to-r from-slate-800 to-[#121212] px-3 py-2 " +
+                          "select-none rounded-lg border-2 border-solid bg-gradient-to-r from-slate-800 to-[#121212] px-3 py-2 " +
                           `${selectedPlayers.includes(player.uuid) ? "border-green-500" : "border-[#121212]"}`
                         }
                         key={index}
@@ -464,7 +464,7 @@ export default function TeamPicker() {
                 <div className="sticky bottom-0 flex flex-col items-center justify-center gap-4 p-2">
                   <button
                     onClick={generateTeams}
-                    className="rounded-md bg-green-600 px-4 py-2 text-xl font-semibold shadow-md shadow-black"
+                    className="select-none rounded-md bg-green-600 px-4 py-2 text-xl font-semibold shadow-md shadow-black"
                   >
                     Pick Teams{" "}
                     {selectedPlayers.length > 0 &&
@@ -482,7 +482,7 @@ export default function TeamPicker() {
                   }
                 >
                   <div className="flex flex-col items-center gap-5 py-10">
-                    <p className="text-2xl text-green-500">
+                    <p className="text-2xl text-green-500 select-none">
                       Generating Teams...
                     </p>
                     <div>
