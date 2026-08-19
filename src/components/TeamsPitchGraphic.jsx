@@ -50,7 +50,7 @@ export default function TeamsPitchGraphic({
       var player = (
         <div
           key={p.name}
-          className={`pitch-player cursor-pointer ${makingChanges ? "wobble" : ""}`}
+          className={`pitch-player cursor-pointer ${makingChanges ? "jiggle" : ""}`}
           onClick={() => onPlayerClick?.(p, index)}
         >
           <div

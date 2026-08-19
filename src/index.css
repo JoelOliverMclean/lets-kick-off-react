@@ -319,3 +319,25 @@ input:checked + .slider-sm:before {
   25%      { transform: rotate(-3deg); }
   75%      { transform: rotate(3deg); }
 }
+
+.jiggle {
+  animation: jiggle 0.25s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes jiggle {
+  0%   { transform: rotate(-1deg); }
+  50%  { transform: rotate(1deg); }
+  100% { transform: rotate(-1deg); }
+}
+
+/* Stagger siblings so they don't move in lockstep */
+.jiggle:nth-child(2n) {
+  animation-delay: -0.15s;
+}
+.jiggle:nth-child(3n) {
+  animation-delay: -0.08s;
+}
+.jiggle:nth-child(5n) {
+  animation-delay: -0.2s;
+}
